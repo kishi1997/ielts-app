@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { getAllDates } from '@/lib/db'
 
+export const dynamic = 'force-dynamic'
+
 function groupByMonth(dates: string[]): Record<string, string[]> {
   return dates.reduce((acc, date) => {
     const month = date.slice(0, 7)

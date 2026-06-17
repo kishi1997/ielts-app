@@ -7,9 +7,15 @@ interface Props {
   params: Promise<{ date: string }>
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
-  const dates = await getAllDates()
-  return dates.map((date) => ({ date }))
+  try {
+    const dates = await getAllDates()
+    return dates.map((date) => ({ date }))
+  } catch {
+    return []
+  }
 }
 
 export default async function ExercisePage({ params }: Props) {
