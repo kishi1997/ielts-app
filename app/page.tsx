@@ -8,8 +8,13 @@ export default async function HomePage() {
 
   if (dates.length === 0) {
     return (
-      <main className="max-w-xl mx-auto px-3 pt-8 text-center text-gray-400 text-sm">
-        No exercises yet. Run /ielts-daily to generate today&apos;s exercises.
+      <main className="flex min-h-screen items-center justify-center bg-bg px-4 text-center text-sm text-fg-soft">
+        <div className="max-w-sm rounded-lg border border-border bg-surface p-6">
+          <h1 className="text-lg font-bold text-fg">No exercises yet</h1>
+          <p className="mt-2 leading-relaxed">
+            Run /ielts-daily to generate today&apos;s exercises.
+          </p>
+        </div>
       </main>
     )
   }

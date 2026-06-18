@@ -1,0 +1,53 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - paragraph [ref=e6]: 2026-06-17
+          - paragraph [ref=e7]: IELTS Writing
+        - paragraph [ref=e8]: 1 / 10
+      - progressbar [ref=e9]
+    - main [ref=e11]:
+      - article [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - paragraph [ref=e16]: Exercise 1
+            - heading "Urban Development" [level=2] [ref=e17]
+          - generic [ref=e18]: Practice
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - paragraph [ref=e21]: Japanese Prompt
+            - paragraph [ref=e22]: 多くの都市では急速な人口増加により、住宅不足や交通渋滞が深刻な問題となっている。持続可能な都市開発のためには、長期的な視点が必要だ。
+          - generic [ref=e23]:
+            - paragraph [ref=e24]: Required Phrases
+            - generic [ref=e25]:
+              - generic [ref=e26]: pose a significant challenge to
+              - generic [ref=e27]: strike a balance between
+              - generic [ref=e28]: in the long run
+              - generic [ref=e29]: have a profound impact on
+              - generic [ref=e30]: it is widely acknowledged that
+          - generic [ref=e31]:
+            - generic [ref=e32]: Your Answer
+            - textbox "Your Answer" [ref=e33]:
+              - /placeholder: Write your answer here...
+          - generic [ref=e35]:
+            - paragraph [ref=e36]: Model Answer
+            - button "Show" [ref=e37]
+          - generic [ref=e38]:
+            - paragraph [ref=e39]: Tips
+            - list [ref=e40]:
+              - listitem [ref=e41]:
+                - code [ref=e42]: pose a significant challenge to
+                - generic [ref=e43]: present a major obstacle to（同義。obstacleはやや具体的な障壁のニュアンス） / constitute a serious difficulty for（よりフォーマルな書き言葉表現）
+              - listitem [ref=e44]:
+                - code [ref=e45]: strike a balance between
+                - generic [ref=e46]: achieve an equilibrium between（equilibriumは均衡・平衡の意。学術的） / find a middle ground between（よりカジュアル。口語でも使える）
+              - listitem [ref=e47]:
+                - code [ref=e48]: in the long run
+                - generic [ref=e49]: over time（シンプルで汎用的） / in the long term（long runより書き言葉寄り）
+    - navigation [ref=e50]:
+      - generic [ref=e51]:
+        - button "Previous" [disabled]
+        - button "Next" [ref=e52]
+  - button "Open Next.js Dev Tools" [ref=e58] [cursor=pointer]:
+    - img [ref=e59]

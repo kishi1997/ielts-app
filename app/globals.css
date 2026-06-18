@@ -1,6 +1,75 @@
 @import "tailwindcss";
 
+@theme {
+  /* === base colors (plain hex only — no var() inside @theme) === */
+  --color-bg:        #16161c;
+  --color-surface:   #1f2029;
+  --color-surface-2: #272935;
+  --color-border:    #2d2f3c;
+
+  --color-fg:        #e6e7ee;
+  --color-fg-soft:   #a2a6b4;
+  --color-fg-faint:  #6b7080;
+
+  /* section accent colors */
+  --color-jp:        #5b9dff;
+  --color-phrase:    #c3a7ff;
+  --color-answer:    #4ed7a0;
+  --color-tip:       #f5c451;
+
+  /* section tinted backgrounds — rgba() avoids 8-digit hex parsing issues */
+  --color-jp-bg:     rgba(91, 157, 255, 0.10);
+  --color-phrase-bg: rgba(168, 130, 255, 0.14);
+  --color-answer-bg: rgba(78, 215, 160, 0.10);
+  --color-tip-bg:    rgba(245, 196, 81, 0.10);
+
+  /* fonts — var() is fine here; next/font injects at runtime on <html> */
+  --font-sans:  var(--font-noto), system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), Georgia, serif;
+}
+
+/* shadcn compatibility — direct hex values, no circular chains */
+:root {
+  color-scheme: dark;
+  --background:           #16161c;
+  --foreground:           #e6e7ee;
+  --card:                 #1f2029;
+  --card-foreground:      #e6e7ee;
+  --primary:              #4ed7a0;
+  --primary-foreground:   #16161c;
+  --secondary:            #272935;
+  --secondary-foreground: #e6e7ee;
+  --muted:                #272935;
+  --muted-foreground:     #a2a6b4;
+  --border:               #2d2f3c;
+  --input:                #2d2f3c;
+  --ring:                 #5b9dff;
+  --radius:               8px;
+}
+
+/* base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: #16161c;
+  color: #e6e7ee;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-  background: #f5f5f7;
-  color: #1d1d1f;
+  min-height: 100dvh;
+  background-color: #16161c;
+  color: #e6e7ee;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: rgba(91, 157, 255, 0.25);
+  color: #e6e7ee;
 }

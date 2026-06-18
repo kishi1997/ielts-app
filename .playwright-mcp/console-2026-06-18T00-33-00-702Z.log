@@ -1,0 +1,17 @@
+[     661ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[     792ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[  866346ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[  866485ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[  866524ms] [LOG] [Fast Refresh] done in 137ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[ 1035443ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[ 1035927ms] [LOG] [Fast Refresh] done in 585ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[ 1036489ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[ 1037312ms] [LOG] [Fast Refresh] done in 924ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[12759009ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[12759092ms] [LOG] [Fast Refresh] done in 230ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[13540645ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[13540689ms] [LOG] [Fast Refresh] done in 149ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[13573719ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[13573813ms] [LOG] [Fast Refresh] done in 196ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[14341011ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
+[14343070ms] [LOG] [Fast Refresh] done in 2164ms @ http://localhost:3000/_next/static/chunks/1a5o_next_dist_1ya6gqr._.js:2477
