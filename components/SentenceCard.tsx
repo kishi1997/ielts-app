@@ -1,15 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import type { Exercise } from '@/lib/types'
+import type { SentenceQuestion } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
-  exercise: Exercise
+  exercise: SentenceQuestion
 }
 
-export default function ExerciseCard({ exercise }: Props) {
+export default function SentenceCard({ exercise }: Props) {
   const [selfAnswer, setSelfAnswer] = useState('')
   const [showModelAnswer, setShowModelAnswer] = useState(false)
 
@@ -18,14 +18,14 @@ export default function ExerciseCard({ exercise }: Props) {
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-wider text-fg-faint">
-            Exercise {exercise.order}
+            Sentence {exercise.order}
           </p>
           <h2 className="mt-1 text-lg font-bold leading-tight text-fg">
-            {exercise.topic}
+            Instant Translation
           </h2>
         </div>
-        <span className="rounded-full border border-jp/30 bg-jp-bg px-2.5 py-1 text-xs font-semibold text-jp">
-          Practice
+        <span className="rounded-md border border-phrase/25 bg-phrase-bg px-2.5 py-1 font-serif text-sm text-phrase">
+          {exercise.word}
         </span>
       </div>
 
@@ -34,23 +34,7 @@ export default function ExerciseCard({ exercise }: Props) {
           <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-jp">
             Japanese Prompt
           </p>
-          <p className="text-base leading-[1.8] text-fg">{exercise.ja_paragraph}</p>
-        </section>
-
-        <section>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-phrase">
-            Required Phrases
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {exercise.phrases.map((phrase) => (
-              <span
-                key={phrase}
-                className="rounded-md border border-phrase/25 bg-phrase-bg px-2.5 py-1 font-serif text-[15px] leading-relaxed text-phrase"
-              >
-                {phrase}
-              </span>
-            ))}
-          </div>
+          <p className="text-base leading-[1.8] text-fg">{exercise.ja_sentence}</p>
         </section>
 
         <section>
@@ -65,7 +49,7 @@ export default function ExerciseCard({ exercise }: Props) {
             value={selfAnswer}
             onChange={(event) => setSelfAnswer(event.target.value)}
             placeholder="Write your answer here..."
-            className="min-h-44 resize-y bg-answer-bg text-base"
+            className="min-h-20 resize-y bg-answer-bg text-base"
           />
         </section>
 
@@ -94,21 +78,14 @@ export default function ExerciseCard({ exercise }: Props) {
           ) : null}
         </section>
 
-        <section className="rounded-lg border border-tip/25 bg-tip-bg p-4">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-tip">
-            Tips
-          </p>
-          <ul className="space-y-2 text-[15px] leading-relaxed text-fg-soft">
-            {exercise.tips.map((tip) => (
-              <li key={tip.phrase} className="flex gap-2">
-                <code className="rounded bg-surface-2 px-1.5 py-0.5 font-serif text-sm text-tip">
-                  {tip.phrase}
-                </code>
-                <span>{tip.synonyms.join(' / ')}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {exercise.tips ? (
+          <section className="rounded-lg border border-tip/25 bg-tip-bg p-4">
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-tip">
+              Tips
+            </p>
+            <p className="text-[15px] leading-relaxed text-fg-soft">{exercise.tips}</p>
+          </section>
+        ) : null}
       </div>
     </article>
   )
