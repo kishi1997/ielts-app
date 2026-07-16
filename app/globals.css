@@ -23,6 +23,9 @@
   --color-answer-bg: rgba(78, 215, 160, 0.10);
   --color-tip-bg:    rgba(245, 196, 81, 0.10);
 
+  --color-error:     #f2555c;
+  --color-error-bg:  rgba(242, 85, 92, 0.12);
+
   /* fonts — var() is fine here; next/font injects at runtime on <html> */
   --font-sans:  var(--font-noto), system-ui, sans-serif;
   --font-serif: var(--font-newsreader), Georgia, serif;
