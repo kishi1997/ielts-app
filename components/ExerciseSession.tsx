@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import type { DailyContent } from '@/lib/types'
 import VocabQuiz from '@/components/VocabQuiz'
@@ -29,11 +29,15 @@ export default function ExerciseSession({ content }: Props) {
 
   const [vocabRound, setVocabRound] = useState(1)
   const [vocabOrder, setVocabOrder] = useState<number[]>(() =>
-    shuffledIndexes(content.vocab.length),
+    Array.from({ length: content.vocab.length }, (_, i) => i),
   )
   const [vocabPosition, setVocabPosition] = useState(0)
   const [vocabSelected, setVocabSelected] = useState<number | null>(null)
   const [vocabWrongInRound, setVocabWrongInRound] = useState<Set<number>>(new Set())
+
+  useEffect(() => {
+    setVocabOrder(shuffledIndexes(content.vocab.length))
+  }, [content.vocab.length])
 
   const [writingIndex, setWritingIndex] = useState(0)
 
@@ -90,7 +94,7 @@ export default function ExerciseSession({ content }: Props) {
   const totalSteps = phase === 'vocab' ? content.vocab.length : totalWritingSteps
   const progressValue = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0
 
-  if (phase === 'writing' && !currentSentence) {
+  if ((phase === 'vocab' && !currentVocabQuestion) || (phase === 'writing' && !currentSentence)) {
     return (
       <main className="min-h-screen bg-bg px-4 py-12 text-center text-sm text-fg-soft">
         No exercises available.
