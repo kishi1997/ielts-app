@@ -2,42 +2,95 @@
 
 import { useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import type { Exercise } from '@/lib/types'
-import ExerciseCard from '@/components/ExerciseCard'
+import type { DailyContent } from '@/lib/types'
+import VocabQuiz from '@/components/VocabQuiz'
+import SentenceCard from '@/components/SentenceCard'
 import MobileHeader from '@/components/MobileHeader'
 import Sidebar from '@/components/Sidebar'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 
 interface Props {
-  exercises: Exercise[]
+  content: DailyContent
 }
 
-export default function ExerciseSession({ exercises }: Props) {
+function shuffledIndexes(length: number): number[] {
+  const indexes = Array.from({ length }, (_, i) => i)
+  for (let i = indexes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[indexes[i], indexes[j]] = [indexes[j], indexes[i]]
+  }
+  return indexes
+}
+
+export default function ExerciseSession({ content }: Props) {
   const pathname = usePathname()
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const totalSteps = exercises.length
-  const currentStep = totalSteps > 0 ? currentIndex + 1 : 0
-  const progressValue = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0
-  const currentExercise = exercises[currentIndex]
+  const [phase, setPhase] = useState<'vocab' | 'writing'>('vocab')
+
+  const [vocabRound, setVocabRound] = useState(1)
+  const [vocabOrder, setVocabOrder] = useState<number[]>(() =>
+    shuffledIndexes(content.vocab.length),
+  )
+  const [vocabPosition, setVocabPosition] = useState(0)
+  const [vocabSelected, setVocabSelected] = useState<number | null>(null)
+  const [vocabWrongInRound, setVocabWrongInRound] = useState<Set<number>>(new Set())
+
+  const [writingIndex, setWritingIndex] = useState(0)
 
   const currentDate = useMemo(() => {
     const segment = pathname.split('/').filter(Boolean)[0]
     return segment ?? ''
   }, [pathname])
 
-  const canGoPrevious = currentIndex > 0
-  const canGoNext = currentIndex < totalSteps - 1
+  const currentVocabQuestion = content.vocab[vocabOrder[vocabPosition]]
 
-  function goPrevious() {
-    setCurrentIndex((index) => Math.max(0, index - 1))
+  function handleVocabSelect(choiceIndex: number) {
+    if (vocabSelected !== null) return
+    setVocabSelected(choiceIndex)
+    if (choiceIndex !== currentVocabQuestion.answerIndex) {
+      setVocabWrongInRound((prev) => new Set(prev).add(currentVocabQuestion.order))
+    }
   }
 
-  function goNext() {
-    setCurrentIndex((index) => Math.min(totalSteps - 1, index + 1))
+  function handleVocabNext() {
+    const isLastInRound = vocabPosition === vocabOrder.length - 1
+    if (!isLastInRound) {
+      setVocabPosition((position) => position + 1)
+      setVocabSelected(null)
+      return
+    }
+
+    if (vocabWrongInRound.size === 0) {
+      setPhase('writing')
+      return
+    }
+
+    setVocabRound((round) => round + 1)
+    setVocabOrder(shuffledIndexes(content.vocab.length))
+    setVocabPosition(0)
+    setVocabSelected(null)
+    setVocabWrongInRound(new Set())
   }
 
-  if (!currentExercise) {
+  const totalWritingSteps = content.sentences.length
+  const currentSentence = content.sentences[writingIndex]
+  const canGoPreviousWriting = writingIndex > 0
+  const canGoNextWriting = writingIndex < totalWritingSteps - 1
+
+  function goPreviousWriting() {
+    setWritingIndex((index) => Math.max(0, index - 1))
+  }
+
+  function goNextWriting() {
+    setWritingIndex((index) => Math.min(totalWritingSteps - 1, index + 1))
+  }
+
+  const phaseLabel = phase === 'vocab' ? 'Vocabulary' : 'Writing'
+  const currentStep = phase === 'vocab' ? vocabPosition + 1 : writingIndex + 1
+  const totalSteps = phase === 'vocab' ? content.vocab.length : totalWritingSteps
+  const progressValue = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0
+
+  if (phase === 'writing' && !currentSentence) {
     return (
       <main className="min-h-screen bg-bg px-4 py-12 text-center text-sm text-fg-soft">
         No exercises available.
@@ -49,11 +102,13 @@ export default function ExerciseSession({ exercises }: Props) {
     <div className="min-h-screen bg-bg">
       <MobileHeader
         currentDate={currentDate}
+        phaseLabel={phaseLabel}
         currentStep={currentStep}
         totalSteps={totalSteps}
       />
       <Sidebar
         currentDate={currentDate}
+        phaseLabel={phaseLabel}
         currentStep={currentStep}
         totalSteps={totalSteps}
       />
@@ -64,48 +119,63 @@ export default function ExerciseSession({ exercises }: Props) {
             <div className="mb-3 flex items-center justify-between gap-4">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-fg-faint">
-                  Current Step
+                  {phaseLabel}
+                  {phase === 'vocab' && vocabRound > 1 ? ` · Round ${vocabRound}` : ''}
                 </p>
                 <p className="mt-1 text-lg font-bold text-fg">
                   {currentStep} / {totalSteps}
                 </p>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={goPrevious}
-                  disabled={!canGoPrevious}
-                >
-                  Previous
-                </Button>
-                <Button size="sm" onClick={goNext} disabled={!canGoNext}>
-                  Next
-                </Button>
-              </div>
+              {phase === 'writing' ? (
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goPreviousWriting}
+                    disabled={!canGoPreviousWriting}
+                  >
+                    Previous
+                  </Button>
+                  <Button size="sm" onClick={goNextWriting} disabled={!canGoNextWriting}>
+                    Next
+                  </Button>
+                </div>
+              ) : null}
             </div>
             <Progress value={progressValue} />
           </div>
 
-          <ExerciseCard exercise={currentExercise} />
+          {phase === 'vocab' ? (
+            <VocabQuiz
+              question={currentVocabQuestion}
+              roundNumber={vocabRound}
+              selectedIndex={vocabSelected}
+              onSelect={handleVocabSelect}
+              onNext={handleVocabNext}
+            />
+          ) : (
+            <SentenceCard exercise={currentSentence} />
+          )}
         </div>
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur lg:hidden">
-        <div className="mx-auto flex max-w-2xl items-center gap-3">
-          <Button
-            variant="outline"
-            className="flex-1"
-            onClick={goPrevious}
-            disabled={!canGoPrevious}
-          >
-            Previous
-          </Button>
-          <Button className="flex-1" onClick={goNext} disabled={!canGoNext}>
-            Next
-          </Button>
-        </div>
-      </nav>
+      {phase === 'writing' ? (
+        <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface/95 px-4 py-3 backdrop-blur lg:hidden">
+          <div className="mx-auto flex max-w-2xl items-center gap-3">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={goPreviousWriting}
+              disabled={!canGoPreviousWriting}
+            >
+              Previous
+            </Button>
+            <Button className="flex-1" onClick={goNextWriting} disabled={!canGoNextWriting}>
+              Next
+            </Button>
+          </div>
+        </nav>
+      ) : null}
     </div>
   )
 }

@@ -2,12 +2,14 @@ import { Progress } from '@/components/ui/progress'
 
 interface Props {
   currentDate: string
+  phaseLabel: string
   currentStep: number
   totalSteps: number
 }
 
 export default function MobileHeader({
   currentDate,
+  phaseLabel,
   currentStep,
   totalSteps,
 }: Props) {
@@ -18,7 +20,7 @@ export default function MobileHeader({
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0">
           <p className="truncate text-sm font-bold text-fg">{currentDate}</p>
-          <p className="text-xs font-medium text-fg-soft">IELTS Writing</p>
+          <p className="text-xs font-medium text-fg-soft">{phaseLabel}</p>
         </div>
         <p className="shrink-0 text-sm font-bold text-answer">
           {currentStep} / {totalSteps}

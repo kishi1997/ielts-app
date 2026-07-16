@@ -3,6 +3,7 @@ import { Progress } from '@/components/ui/progress'
 
 interface Props {
   currentDate: string
+  phaseLabel: string
   currentStep: number
   totalSteps: number
   prevDate?: string | null
@@ -11,6 +12,7 @@ interface Props {
 
 export default function Sidebar({
   currentDate,
+  phaseLabel,
   currentStep,
   totalSteps,
   prevDate = null,
@@ -39,7 +41,7 @@ export default function Sidebar({
           <div className="mb-3 flex items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-wider text-fg-faint">
-                Progress
+                {phaseLabel}
               </p>
               <p className="mt-1 text-2xl font-bold text-fg">
                 {currentStep} / {totalSteps}
