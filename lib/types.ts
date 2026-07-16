@@ -1,13 +1,19 @@
-export interface Tip {
-  phrase: string
-  synonyms: string[]
+export interface VocabQuestion {
+  order: number
+  word: string
+  choices: string[]
+  answerIndex: number
 }
 
-export interface Exercise {
+export interface SentenceQuestion {
   order: number
-  topic: string
-  ja_paragraph: string
-  phrases: string[]
+  word: string
+  ja_sentence: string
   model_answer: string
-  tips: Tip[]
+  tips?: string
+}
+
+export interface DailyContent {
+  vocab: VocabQuestion[]
+  sentences: SentenceQuestion[]
 }

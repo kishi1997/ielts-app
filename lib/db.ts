@@ -1,5 +1,5 @@
 import { neon } from '@neondatabase/serverless'
-import type { Exercise } from './types'
+import type { DailyContent } from './types'
 
 type SqlFunc = ReturnType<typeof neon>
 
@@ -15,12 +15,12 @@ function getSql(): SqlFunc {
   return sql
 }
 
-export async function getExercisesByDate(date: string): Promise<Exercise[] | null> {
+export async function getExercisesByDate(date: string): Promise<DailyContent | null> {
   const rows = await getSql()`
     SELECT exercises FROM daily_exercises WHERE date = ${date}
   ` as any[]
   if (rows.length === 0) return null
-  return rows[0].exercises as Exercise[]
+  return rows[0].exercises as DailyContent
 }
 
 export async function getAllDates(): Promise<string[]> {
@@ -37,9 +37,9 @@ export async function exerciseExistsForDate(date: string): Promise<boolean> {
   return rows.length > 0
 }
 
-export async function saveExercises(date: string, exercises: Exercise[]): Promise<void> {
+export async function saveExercises(date: string, content: DailyContent): Promise<void> {
   await getSql()`
     INSERT INTO daily_exercises (date, exercises)
-    VALUES (${date}, ${JSON.stringify(exercises)})
+    VALUES (${date}, ${JSON.stringify(content)})
   `
 }
