@@ -22,8 +22,8 @@ export default async function ExercisePage({ params }: Props) {
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) notFound()
 
-  const exercises = await getExercisesByDate(date)
-  if (!exercises) notFound()
+  const content = await getExercisesByDate(date)
+  if (!content) notFound()
 
-  return <ExerciseSession exercises={exercises} />
+  return <ExerciseSession content={content} />
 }
