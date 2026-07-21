@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IELTS Writing Quest
 
-## Getting Started
+黒猫コーチ「ナイチー」と進める IELTS Writing 学習アプリです。AI添削は使わず、語彙クイズ、瞬間英作文、解説、できなかった問題の復習リストに絞っています。
 
-First, run the development server:
+## 方針
+
+- 本番は Cloudflare Workers + D1
+- Next.js の Workers デプロイは OpenNext Cloudflare
+- Auth.js + D1 Adapter でセッション、OAuthアカウント、ユーザーをD1に保存
+- Supabase、Prisma、PostgreSQL、Vercel本番依存は使わない
+- Cloudflare Free Plan 前提。R2、Workers AI、Hyperdrive、Vectorize、Analytics Engine は使わない
+
+## ローカル確認
 
 ```bash
+npm install
+cp .dev.vars.example .dev.vars
+npm run db:migrate:local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.dev.vars` にはローカル確認用の値を入れてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```dotenv
+AUTH_SECRET="openssl rand -base64 32 などで作った値"
+AUTH_GOOGLE_ID="Google OAuth client id"
+AUTH_GOOGLE_SECRET="Google OAuth client secret"
+IELTS_API_SECRET="課題投入API用のBearer secret"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ログイン方式
 
-## Learn More
+ログイン方式は Google OAuth です。学習アプリとして多くのユーザーが使いやすい一方で、Google Cloud Console の同意画面、テストユーザー、redirect URI の完全一致で詰まりやすいので、下記のURLをそのまま登録してください。
 
-To learn more about Next.js, take a look at the following resources:
+Cloudflare Access は社内・個人用の保護ゲートには便利ですが、アプリ内のユーザー、セッション、復習データをD1で管理する今回の構成では Auth.js OAuth の方が自然です。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Google OAuth 設定
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Google Cloud Console で OAuth クライアントを作成します。
 
-## Deploy on Vercel
+- 種類: ウェブ アプリケーション
+- 承認済みのリダイレクト URI: `https://ielts-writing-app.tomo9634.workers.dev/api/auth/callback/google`
+- 承認済みの JavaScript 生成元: `https://ielts-writing-app.tomo9634.workers.dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`redirect_uri_mismatch` が出る場合は、ドメイン、パス、末尾スラッシュまで完全一致しているか確認してください。OAuth同意画面がテスト中なら、自分のGoogleアカウントをテストユーザーに追加します。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Cloudflare Secrets
+
+Secretsは `wrangler.jsonc` に書きません。
+
+```bash
+npm exec wrangler secret put AUTH_SECRET
+npm exec wrangler secret put AUTH_GOOGLE_ID
+npm exec wrangler secret put AUTH_GOOGLE_SECRET
+```
+
+課題投入APIを使う場合:
+
+```bash
+npm exec wrangler secret put IELTS_API_SECRET
+```
+
+## D1
+
+`wrangler.jsonc` は指定の参考プロジェクトに合わせて、以下のD1を参照しています。
+
+- database_name: `ielts-writing`
+- database_id: `b212ff67-5061-437e-9270-72f33d4b8603`
+- binding: `DB`
+
+ローカル:
+
+```bash
+npm run db:migrate:local
+```
+
+本番リモート:
+
+```bash
+npm run db:deploy
+```
+
+本番リモートのmigration適用とWorker deployは、ローカルUI確認後に実行してください。
+
+## Scripts
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm run cf:build
+npm run deploy
+```
+
+`deploy` は `db:deploy` のあと `opennextjs-cloudflare deploy` を実行します。
+
+## Cloudflare Builds
+
+Cloudflare Dashboard の Workers Builds でGitHubリポジトリを接続します。
+
+- Build command: `npm run cf:build`
+- Deploy command: `npm run deploy`
+- Non-production branch deploy command: `npm run upload`
+- Root directory: `/`
+
+非本番ブランチの自動ビルドが不要なら無効化します。
+
+## CI
+
+GitHub Actions では最低限だけ実行します。
+
+- install
+- lint
+- typecheck
+- Cloudflare build
+
+Cloudflareへの実デプロイはDashboard側に任せ、Actionsでは不要なジョブを増やしません。
+
+## 確認項目
+
+- `/` が未ログイン時に `/login` へ遷移する
+- `/login` が200を返す
+- `/dashboard` が未ログイン時に `/login` へリダイレクトする
+- Googleログインボタンから認証画面へ進める
+- ログイン後にdashboardが表示される
+- 問題で「解説を見る」が使える
+- できなかった問題を追加できる
+- 「できるようになった」で復習リストから外せる
+- スマホ幅で文字とボタンがはみ出さない

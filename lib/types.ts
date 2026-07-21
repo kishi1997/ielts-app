@@ -3,6 +3,10 @@ export interface VocabQuestion {
   word: string
   choices: string[]
   answerIndex: number
+  meaning?: string
+  etymology?: string
+  mnemonic?: string
+  example?: string
 }
 
 export interface SentenceQuestion {
@@ -11,9 +15,25 @@ export interface SentenceQuestion {
   ja_sentence: string
   model_answer: string
   tips?: string
+  explanation?: string
 }
 
 export interface DailyContent {
   vocab: VocabQuestion[]
   sentences: SentenceQuestion[]
+}
+
+export type ProblemType = 'vocab' | 'sentence'
+
+export interface MissedProblem {
+  id: string
+  sourceDate: string
+  problemType: ProblemType
+  problemOrder: number
+  title: string
+  prompt: string
+  answer: string
+  explanation: string
+  createdAt: string
+  updatedAt: string
 }

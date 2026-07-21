@@ -5,20 +5,35 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "cf:typegen": "CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV=false wrangler types --include-runtime false --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "cf:build": "opennextjs-cloudflare build",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "db:migrate:local": "wrangler d1 migrations apply ielts-writing --local",
+    "db:deploy": "wrangler d1 migrations apply ielts-writing --remote",
+    "deploy": "npm run db:deploy && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.1.0",
+    "@auth/d1-adapter": "^1.11.2",
+    "@opennextjs/cloudflare": "^1.20.1",
     "next": "16.2.9",
+    "next-auth": "^5.0.0-beta.31",
     "react": "19.2.4",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260718.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.2.10",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.112.0"
   }
 }

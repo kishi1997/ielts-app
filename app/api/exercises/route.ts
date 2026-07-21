@@ -1,10 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { isAuthBypassEnabled } from '@/lib/current-user'
 import { exerciseExistsForDate, saveExercises } from '@/lib/db'
 import type { DailyContent, SentenceQuestion, VocabQuestion } from '@/lib/types'
 
-function isAuthorized(request: NextRequest): boolean {
+const MAX_BODY_BYTES = 120_000
+
+async function digestText(value: string): Promise<ArrayBuffer> {
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(value))
+}
+
+async function timingSafeTextEqual(a: string, b: string): Promise<boolean> {
+  const [aDigest, bDigest] = await Promise.all([digestText(a), digestText(b)])
+  const subtle = crypto.subtle as SubtleCrypto & {
+    timingSafeEqual?: (a: ArrayBuffer | ArrayBufferView, b: ArrayBuffer | ArrayBufferView) => boolean
+  }
+  if (subtle.timingSafeEqual) {
+    return subtle.timingSafeEqual(aDigest, bDigest)
+  }
+
+  const aBytes = new Uint8Array(aDigest)
+  const bBytes = new Uint8Array(bDigest)
+  let diff = aBytes.length ^ bBytes.length
+  for (let index = 0; index < Math.max(aBytes.length, bBytes.length); index += 1) {
+    diff |= (aBytes[index] ?? 0) ^ (bBytes[index] ?? 0)
+  }
+  return diff === 0
+}
+
+async function isAuthorized(request: NextRequest): Promise<boolean> {
+  if (isAuthBypassEnabled()) return true
+  const expected = process.env.IELTS_API_SECRET
   const auth = request.headers.get('Authorization')
-  return auth === `Bearer ${process.env.IELTS_API_SECRET}`
+  if (!expected || !auth?.startsWith('Bearer ')) return false
+  return timingSafeTextEqual(auth.slice('Bearer '.length), expected)
 }
 
 function isValidVocabQuestion(q: unknown): q is VocabQuestion {
@@ -18,7 +46,11 @@ function isValidVocabQuestion(q: unknown): q is VocabQuestion {
     v.choices.every((c) => typeof c === 'string') &&
     typeof v.answerIndex === 'number' &&
     v.answerIndex >= 0 &&
-    v.answerIndex < 4
+    v.answerIndex < 4 &&
+    (v.meaning === undefined || typeof v.meaning === 'string') &&
+    (v.etymology === undefined || typeof v.etymology === 'string') &&
+    (v.mnemonic === undefined || typeof v.mnemonic === 'string') &&
+    (v.example === undefined || typeof v.example === 'string')
   )
 }
 
@@ -30,7 +62,8 @@ function isValidSentenceQuestion(q: unknown): q is SentenceQuestion {
     typeof s.word === 'string' &&
     typeof s.ja_sentence === 'string' &&
     typeof s.model_answer === 'string' &&
-    (s.tips === undefined || typeof s.tips === 'string')
+    (s.tips === undefined || typeof s.tips === 'string') &&
+    (s.explanation === undefined || typeof s.explanation === 'string')
   )
 }
 
@@ -55,14 +88,24 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!isAuthorized(request)) {
+  if (!(await isAuthorized(request))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = (await request.json()) as { date: string; vocab?: unknown; sentences?: unknown }
+  const contentLength = Number(request.headers.get('content-length') ?? 0)
+  if (contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: 'Request body is too large' }, { status: 413 })
+  }
+
+  let body: { date?: unknown; vocab?: unknown; sentences?: unknown }
+  try {
+    body = (await request.json()) as { date?: unknown; vocab?: unknown; sentences?: unknown }
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
   const { date } = body
 
-  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+  if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: 'Invalid date format' }, { status: 400 })
   }
   if (!isValidDailyContent({ vocab: body.vocab, sentences: body.sentences })) {

@@ -1,79 +1,61 @@
 import Link from 'next/link'
+import AppHeader from '@/components/AppHeader'
+import NightieCoach from '@/components/NightieCoach'
+import { getCurrentUserOrRedirect } from '@/lib/current-user'
 import { getAllDates } from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 
 function groupByMonth(dates: string[]): Record<string, string[]> {
-  return dates.reduce((acc, date) => {
+  return dates.reduce<Record<string, string[]>>((groups, date) => {
     const month = date.slice(0, 7)
-    if (!acc[month]) acc[month] = []
-    acc[month].push(date)
-    return acc
-  }, {} as Record<string, string[]>)
+    groups[month] = [...(groups[month] ?? []), date]
+    return groups
+  }, {})
 }
 
-function formatMonth(ym: string): string {
-  const [year, month] = ym.split('-')
-  return `${year}年${parseInt(month)}月`
-}
-
-function formatDayOfWeek(date: string): string {
-  const [year, month, day] = date.split('-').map(Number)
-  return new Intl.DateTimeFormat('ja-JP', {
-    weekday: 'short',
-    timeZone: 'UTC',
-  }).format(new Date(Date.UTC(year, month - 1, day)))
+function formatMonth(month: string): string {
+  const [year, value] = month.split('-')
+  return `${year}年${Number(value)}月`
 }
 
 export default async function ArchivePage() {
+  const user = await getCurrentUserOrRedirect()
+
   const dates = await getAllDates()
   const grouped = groupByMonth(dates)
-  const months = Object.keys(grouped).sort().reverse()
 
   return (
-    <main className="min-h-screen bg-bg px-4 py-8 text-fg">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-fg-faint">
-              IELTS Writing
-            </p>
-            <h1 className="mt-1 text-2xl font-bold">Archive</h1>
-            <p className="mt-1 text-sm text-fg-soft">{dates.length} days</p>
+    <div className="min-h-dvh bg-bg">
+      <AppHeader active="archive" userName={user.name} />
+      <main className="lg:ml-[268px]">
+        <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 sm:py-10">
+          <div className="mb-7 grid items-center gap-5 md:grid-cols-[1fr_340px]">
+            <div>
+              <p className="label-text text-jp">Practice archive</p>
+              <h1 className="mt-2 text-3xl font-black text-fg sm:text-4xl">これまでの課題</h1>
+              <p className="mt-3 text-sm text-fg-soft">{dates.length}日分の練習から、もう一度挑戦できます。</p>
+            </div>
+            <NightieCoach compact message="前に解いた問題は、少し時間をあけると良い復習になるよ。" mood="study" />
           </div>
-          <Link
-            href="/"
-            className="rounded-md border border-border bg-surface px-3 py-2 text-sm font-semibold text-jp transition-colors hover:bg-surface-2"
-          >
-            今日へ戻る
-          </Link>
-        </div>
 
-        {months.map((month) => (
-          <section key={month} className="mb-7">
-            <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-fg-faint">
-              {formatMonth(month)}
-            </div>
-            <div className="overflow-hidden rounded-lg border border-border bg-surface">
-              {grouped[month].map((date, i) => (
-                <Link
-                  key={date}
-                  href={`/${date}`}
-                  className={`flex items-center justify-between gap-4 px-4 py-3 text-sm transition-colors hover:bg-surface-2 ${
-                    i < grouped[month].length - 1 ? 'border-b border-border' : ''
-                  }`}
-                >
-                  <span>
-                    <span className="font-semibold text-fg">{date}</span>
-                    <span className="ml-2 text-fg-soft">{formatDayOfWeek(date)}</span>
-                  </span>
-                  <span className="text-jp">Open</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
-    </main>
+          <div className="space-y-6">
+            {Object.keys(grouped).sort().reverse().map((month) => (
+              <section key={month} className="game-card overflow-hidden">
+                <h2 className="border-b border-white/7 bg-surface-2/60 px-5 py-4 text-sm font-black text-jp">{formatMonth(month)}</h2>
+                <div className="grid gap-px bg-border sm:grid-cols-2">
+                  {grouped[month].map((date) => (
+                    <Link key={date} href={`/${date}`} className="flex min-w-0 items-center justify-between gap-3 bg-surface px-5 py-4 transition hover:bg-surface-2">
+                      <span className="min-w-0 break-words font-bold text-fg">{date}</span>
+                      <span className="shrink-0 text-sm font-black text-answer">挑戦する →</span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
   )
 }

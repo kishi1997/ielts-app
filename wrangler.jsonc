@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ielts-writing-app",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-17",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "vars": {
+    "AUTH_URL": "https://ielts-writing-app.tomo9634.workers.dev",
+    "AUTH_TRUST_HOST": "true"
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "ielts-writing-app"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ielts-writing",
+      "database_id": "b212ff67-5061-437e-9270-72f33d4b8603",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

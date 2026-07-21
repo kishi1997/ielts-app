@@ -4,20 +4,23 @@ import { useState } from 'react'
 import type { SentenceQuestion } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import MissedProblemButton from '@/components/MissedProblemButton'
 
 interface Props {
+  sourceDate: string
   exercise: SentenceQuestion
 }
 
-export default function SentenceCard({ exercise }: Props) {
+export default function SentenceCard({ sourceDate, exercise }: Props) {
   const [selfAnswer, setSelfAnswer] = useState('')
   const [showModelAnswer, setShowModelAnswer] = useState(false)
+  const explanation = exercise.explanation || exercise.tips
 
   return (
-    <article className="rounded-lg border border-border bg-surface p-4 shadow-sm sm:p-5">
+    <article className="game-card p-4 sm:p-5">
       <div className="mb-5 flex items-start justify-between gap-3">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-fg-faint">
+          <p className="label-text text-fg-faint">
             Sentence {exercise.order}
           </p>
           <h2 className="mt-1 text-lg font-bold leading-tight text-fg">
@@ -31,7 +34,7 @@ export default function SentenceCard({ exercise }: Props) {
 
       <div className="space-y-5">
         <section className="rounded-lg border border-jp/25 bg-jp-bg p-4">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-jp">
+          <p className="mb-2 label-text text-jp">
             Japanese Prompt
           </p>
           <p className="text-base leading-[1.8] text-fg">{exercise.ja_sentence}</p>
@@ -48,14 +51,14 @@ export default function SentenceCard({ exercise }: Props) {
             id={`self-answer-${exercise.order}`}
             value={selfAnswer}
             onChange={(event) => setSelfAnswer(event.target.value)}
-            placeholder="Write your answer here..."
+            placeholder="まず自分の英文を書いてみよう..."
             className="min-h-20 resize-y bg-answer-bg text-base"
           />
         </section>
 
         <section className="rounded-lg border border-answer/25 bg-answer-bg p-4">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-answer">
+            <p className="label-text text-answer">
               Model Answer
             </p>
             <Button
@@ -69,23 +72,36 @@ export default function SentenceCard({ exercise }: Props) {
             </Button>
           </div>
           {showModelAnswer ? (
-            <p
-              id={`model-answer-${exercise.order}`}
-              className="mt-3 border-l-[3px] border-answer pl-3 font-serif text-lg leading-[1.75] text-fg"
-            >
-              {exercise.model_answer}
-            </p>
+            <div className="mt-4 space-y-4">
+              <p
+                id={`model-answer-${exercise.order}`}
+                className="border-l-[3px] border-answer pl-3 font-serif text-lg leading-[1.75] text-fg"
+              >
+                {exercise.model_answer}
+              </p>
+            </div>
           ) : null}
         </section>
 
-        {exercise.tips ? (
+        {explanation ? (
           <section className="rounded-lg border border-tip/25 bg-tip-bg p-4">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-tip">
-              Tips
+            <p className="mb-2 label-text text-tip">
+              Explanation
             </p>
-            <p className="text-[15px] leading-relaxed text-fg-soft">{exercise.tips}</p>
+            <p className="break-words text-[15px] leading-relaxed text-fg-soft">{explanation}</p>
           </section>
         ) : null}
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs leading-5 text-fg-faint">
+            迷ったら復習リストへ。次に自分で書けたら外せます。
+          </p>
+          <MissedProblemButton
+            sourceDate={sourceDate}
+            problemType="sentence"
+            problemOrder={exercise.order}
+          />
+        </div>
       </div>
     </article>
   )
