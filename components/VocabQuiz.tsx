@@ -28,6 +28,7 @@ export default function VocabQuiz({
     ? [
         { label: '意味', value: question.meaning },
         { label: '例文', value: question.example },
+        { label: '例文の和訳', value: question.exampleJa },
         { label: '語源', value: question.etymology },
         { label: '覚え方', value: question.mnemonic },
       ].flatMap((n) => (n.value ? [{ label: n.label, value: n.value }] : []))

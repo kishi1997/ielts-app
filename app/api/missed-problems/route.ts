@@ -46,6 +46,7 @@ export async function POST(request: Request) {
     const explanation = [
       problem.meaning && `意味: ${problem.meaning}`,
       problem.example && `例文: ${problem.example}`,
+      problem.exampleJa && `例文の和訳: ${problem.exampleJa}`,
       problem.etymology && `語源: ${problem.etymology}`,
       problem.mnemonic && `覚え方: ${problem.mnemonic}`,
     ].filter(Boolean).join('\n') || '正解の意味と選択肢を見比べて、もう一度声に出して確認しよう。'

@@ -7,6 +7,7 @@ export interface VocabQuestion {
   etymology?: string
   mnemonic?: string
   example?: string
+  exampleJa?: string
 }
 
 export interface SentenceQuestion {

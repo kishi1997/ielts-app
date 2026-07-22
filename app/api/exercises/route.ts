@@ -50,7 +50,8 @@ function isValidVocabQuestion(q: unknown): q is VocabQuestion {
     (v.meaning === undefined || typeof v.meaning === 'string') &&
     (v.etymology === undefined || typeof v.etymology === 'string') &&
     (v.mnemonic === undefined || typeof v.mnemonic === 'string') &&
-    (v.example === undefined || typeof v.example === 'string')
+    (v.example === undefined || typeof v.example === 'string') &&
+    (v.exampleJa === undefined || typeof v.exampleJa === 'string')
   )
 }
 

@@ -17,6 +17,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'Latinの fluctus（波）に由来し、波のように揺れるイメージ。',
       mnemonic: 'fluctuate = flowのように数値がふらふら動く。',
       example: 'The figure fluctuated between 40% and 55% throughout the period.',
+      exampleJa: 'その数値は期間を通じて40%から55%の間で変動した。',
     },
     {
       order: 2,
@@ -27,6 +28,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'pro（前へ）+ portion（一部分）で、全体に対する部分。',
       mnemonic: 'portion（一部）を全体に対して見ると proportion。',
       example: 'A large proportion of students preferred online courses.',
+      exampleJa: '学生の大きな割合がオンライン授業を好んだ。',
     },
     {
       order: 3,
@@ -37,6 +39,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'approximate（近づける）から。数字を近似するイメージ。',
       mnemonic: 'approx = だいたい近い。',
       example: 'Approximately 70% of respondents chose public transport.',
+      exampleJa: '回答者のおよそ70%が公共交通機関を選んだ。',
     },
     {
       order: 4,
@@ -47,6 +50,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'where + as から発展し、節同士を対比する接続詞になった。',
       mnemonic: 'whereas は「Aはこう、 whereas Bはこう」。',
       example: 'Car use increased, whereas bus use declined.',
+      exampleJa: '車の利用は増えた一方で、バスの利用は減少した。',
     },
     {
       order: 5,
@@ -57,6 +61,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'accountは説明・計算の意味を持つ。数値を説明する句。',
       mnemonic: '数字のaccountを取る = 何%を占める。',
       example: 'Renewable energy accounted for 30% of total production.',
+      exampleJa: '再生可能エネルギーは総生産量の30%を占めた。',
     },
     {
       order: 6,
@@ -67,6 +72,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'de（下へ）+ clinare（傾く）で、下向きに傾くイメージ。',
       mnemonic: 'de = down。decline = downに向かう。',
       example: 'The number of visitors declined after 2018.',
+      exampleJa: '訪問者数は2018年以降減少した。',
     },
     {
       order: 7,
@@ -77,6 +83,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: '山の頂上を表す語から、数値の最高点にも使う。',
       mnemonic: '山のpeak = グラフの一番高いところ。',
       example: 'Sales peaked at 120 million dollars in 2022.',
+      exampleJa: '売上は2022年に1億2000万ドルでピークに達した。',
     },
     {
       order: 8,
@@ -87,6 +94,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'standに近い語源で、しっかり立っているイメージ。',
       mnemonic: 'stable table = ぐらつかない机。数値もぐらつかない。',
       example: 'The unemployment rate remained stable at about 5%.',
+      exampleJa: '失業率は約5%で安定していた。',
     },
     {
       order: 9,
@@ -97,6 +105,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'signify（意味する）と同根で、意味のある大きさ。',
       mnemonic: 'significant = サインが出るほど目立つ。',
       example: 'There was a significant increase in spending on education.',
+      exampleJa: '教育支出には著しい増加が見られた。',
     },
     {
       order: 10,
@@ -107,6 +116,7 @@ export const PREVIEW_DAILY_CONTENT: DailyContent = {
       etymology: 'over + all で、全体を上から見るイメージ。',
       mnemonic: 'over all = 全部を見渡して。',
       example: 'Overall, the use of renewable energy increased steadily.',
+      exampleJa: '全体として、再生可能エネルギーの利用は着実に増加した。',
     },
   ],
   sentences: [
