@@ -38,10 +38,10 @@ export default function MissedProblemButton({ sourceDate, problemType, problemOr
       className="min-h-11 min-w-0 rounded-xl border border-error/35 bg-error-bg px-4 py-2 text-sm font-black text-error shadow-[0_4px_0_rgba(124,36,49,0.65)] transition hover:-translate-y-0.5 disabled:cursor-default disabled:opacity-75"
     >
       <span className="break-words">
-        {state === 'saving' && '保存中…'}
-        {state === 'saved' && '✓ 復習リストに保存済み'}
-        {state === 'error' && 'もう一度保存する'}
-        {state === 'idle' && 'まだできない問題に追加'}
+        {state === 'saving' && 'Saving…'}
+        {state === 'saved' && '✓ Saved for review'}
+        {state === 'error' && 'Try saving again'}
+        {state === 'idle' && 'Add to review list'}
       </span>
     </button>
   )

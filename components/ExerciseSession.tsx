@@ -112,13 +112,13 @@ export default function ExerciseSession({ content, currentDate, olderDate, newer
   const progressValue = totalSteps > 0 ? (currentStep / totalSteps) * 100 : 0
   const phaseHelp =
     phase === 'vocab'
-      ? '選んだらすぐ解説へ。迷った単語は復習リストに残せます。'
-      : 'まず自分で一文。モデル答案と解説を比べて、次に使える表現を拾いましょう。'
+      ? 'Choose an answer, read the notes, and save tricky words for review.'
+      : 'Write your own sentence first, then compare it with the model answer and notes.'
 
   if ((phase === 'vocab' && !currentVocabQuestion) || (phase === 'writing' && !currentSentence)) {
     return (
       <main className="px-4 py-12 text-center text-sm text-fg-soft lg:ml-[268px]">
-        課題がありません。
+        No exercises found.
       </main>
     )
   }
@@ -148,12 +148,12 @@ export default function ExerciseSession({ content, currentDate, olderDate, newer
             <div className="flex flex-wrap gap-2">
               {newerDate ? (
                 <Link href={`/${newerDate}`} className="rounded-lg border border-border px-3 py-2 text-xs font-black text-fg-soft hover:bg-surface-2">
-                  ← 新しい課題
+                  ← Newer quest
                 </Link>
               ) : null}
               {olderDate ? (
                 <Link href={`/${olderDate}`} className="rounded-lg border border-border px-3 py-2 text-xs font-black text-fg-soft hover:bg-surface-2">
-                  古い課題 →
+                  Older quest →
                 </Link>
               ) : null}
             </div>

@@ -25,6 +25,8 @@ export default async function DashboardPage() {
         <span className="float-toy float-toy-yarn" />
         <span className="float-toy float-toy-moon">◔</span>
         <span className="float-toy float-toy-fish">⌁</span>
+        <span className="float-toy float-toy-triangle" />
+        <span className="float-toy float-toy-pill" />
       </div>
       <AppHeader active="dashboard" userName={user.name} />
       <main className="relative z-10 lg:ml-[268px]">
@@ -49,18 +51,18 @@ export default async function DashboardPage() {
                 ◷ TONIGHT&apos;S WRITING QUEST
               </div>
               <h1 className="max-w-xl text-4xl font-black leading-tight text-white sm:text-5xl">
-                書けなかった夜ほど、<span className="text-answer">強くなる。</span>
+                Write tonight<br /><span className="text-answer">Level up tomorrow</span>
               </h1>
               <p className="mt-4 max-w-lg text-sm leading-7 text-white/68 sm:text-base">
-                ナイチーと一緒に、まず一文。迷った問題は印をつけて、できるようになるまで迎えにいこう。
+                One sentence first. Save tricky cards and come back stronger
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 {targetDate ? (
-                  <a href={`/${targetDate}`} className="game-button min-h-13 px-6 text-base">✦ クエストを始める</a>
+                  <a href={`/${targetDate}`} className="game-button min-h-13 px-6 text-base">✦ Start Quest</a>
                 ) : (
                   <span className="rounded-lg border border-white/10 bg-black/30 px-5 py-4 text-sm font-bold text-fg-soft">課題の追加を待っています</span>
                 )}
-                <Link href="/review" className="game-button-secondary min-h-13 px-6 text-base">↻ 復習リストへ</Link>
+                <Link href="/review" className="game-button-secondary min-h-13 px-6 text-base">↻ Review Box</Link>
               </div>
             </div>
           </section>
@@ -70,7 +72,7 @@ export default async function DashboardPage() {
               <span className="status-card-icon text-[#ff8787]" aria-hidden="true">♨</span>
               <p className="label-text text-[#ff8787]">NIGHT STREAK</p>
               <p className="mt-4 text-2xl font-black text-white">1 night</p>
-              <p className="mt-1 text-xs text-white/45">今日の一文からスタート</p>
+              <p className="mt-1 text-xs text-white/45">Start with one sentence</p>
             </div>
             <div className="status-card status-card-play border-[#4dabf7]/30 bg-[#071522]">
               <span className="status-card-icon text-[#74c0fc]" aria-hidden="true">◎</span>
@@ -82,7 +84,7 @@ export default async function DashboardPage() {
               <span className="status-card-icon text-[#ffd43b]" aria-hidden="true">◇</span>
               <p className="label-text text-[#ffd43b]">STAR DUST</p>
               <p className="mt-4 text-2xl font-black text-white">{Math.max(0, dates.length - missedCount)} gems</p>
-              <p className="mt-1 text-xs text-white/45">復習を終えると獲得</p>
+              <p className="mt-1 text-xs text-white/45">Earn stars by reviewing</p>
             </div>
           </section>
 
@@ -97,15 +99,15 @@ export default async function DashboardPage() {
               />
             </div>
             <div>
-              <p className="label-text text-[#ffd43b]">★ ナイチーからのヒント</p>
+              <p className="label-text text-[#ffd43b]">★ NIGHTIE HINT</p>
               <p className="mt-2 text-lg font-black text-white md:text-xl">
-                完璧な答えより、比べられる自分の答えを一つ残そう。
+                One honest answer beats a perfect blank
               </p>
               <p className="mt-2 text-sm leading-6 text-white/50">
-                わからなければ解説を開いて復習リストへ。次に書けたら星を回収。
+                Read the notes, save tricky cards, then collect the stars
               </p>
             </div>
-            <div className="hidden rounded-lg border border-[#58cc02]/25 bg-[#58cc02]/10 px-4 py-3 text-center md:block">
+            <div className="hidden rounded-lg border border-answer/25 bg-answer/10 px-4 py-3 text-center md:block">
               <p className="text-xs font-bold text-white/45">NEXT REWARD</p>
               <p className="mt-1 font-black text-answer">First Sentence</p>
             </div>
@@ -115,18 +117,18 @@ export default async function DashboardPage() {
             <div className="mb-5 flex items-end justify-between gap-4">
               <div>
                 <p className="label-text text-answer">LESSON TRAIL</p>
-                <h2 className="mt-1 text-3xl font-black text-fg">今夜のクエスト</h2>
+                <h2 className="mt-1 text-3xl font-black text-fg">Tonight&apos;s Quest</h2>
               </div>
-              <p className="hidden text-sm text-fg-faint sm:block">1つ選んで書き始める</p>
+              <p className="hidden text-sm text-fg-faint sm:block">Pick one and start writing</p>
             </div>
-            <div className="mb-4 hidden items-center gap-4 rounded-lg border border-answer/20 bg-[#0b1408]/80 px-4 py-3 text-sm text-fg-soft shadow-[0_5px_0_rgba(0,0,0,0.35)] md:flex">
+            <div className="mb-4 hidden items-center gap-4 rounded-lg border border-answer/20 bg-[#1b1007]/80 px-4 py-3 text-sm text-fg-soft shadow-[0_5px_0_rgba(0,0,0,0.35)] md:flex">
               <div className="cat-tower-mini" aria-hidden="true">
                 <span />
                 <span />
                 <span />
               </div>
               <p className="min-w-0 break-words">
-                ナイチーの遊び場マップ。上の足場から順に、語彙、英作文、復習へジャンプしよう。
+                Vocabulary first, sentence writing next, review whenever a card feels tricky
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
@@ -151,20 +153,20 @@ export default async function DashboardPage() {
             <div className="mb-5 flex items-end justify-between gap-4">
               <div>
                 <p className="label-text text-[#ffd43b]">↻ REVIEW</p>
-                <h2 className="mt-1 text-3xl font-black text-fg">できなかった問題</h2>
+                <h2 className="mt-1 text-3xl font-black text-fg">Review Box</h2>
               </div>
-              <p className="hidden text-sm text-fg-faint sm:block">できるようになったら外す</p>
+              <p className="hidden text-sm text-fg-faint sm:block">Turn tricky cards into wins</p>
             </div>
-            <Link href="/review" className="flex items-center gap-4 rounded-lg border border-dashed border-[#ffd43b]/30 bg-[#101407]/80 p-5 transition hover:bg-[#151b0a]">
+            <Link href="/review" className="flex items-center gap-4 rounded-lg border border-dashed border-[#ffd43b]/30 bg-[#141006]/80 p-5 transition hover:bg-[#1c1608]">
               <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-[#ffd43b]/25">
                 <Image src="/images/nightie-coach.png" alt="" fill sizes="64px" className="object-cover object-center" />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block break-words text-lg font-black text-fg">
-                  {missedCount === 0 ? '復習リストは空です' : `${missedCount}問が復習待ちです`}
+                  {missedCount === 0 ? 'No cards waiting' : `${missedCount} cards ready for review`}
                 </span>
                 <span className="mt-1 block break-words text-sm leading-6 text-fg-soft">
-                  わからない問題を見つけたら、ナイチーがここで預かります。
+                  Save tricky cards here and revisit them anytime
                 </span>
               </span>
               <span className="hidden rounded-lg bg-[#ffd43b]/12 px-4 py-2 text-sm font-black text-[#ffd43b] sm:block">

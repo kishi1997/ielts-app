@@ -94,7 +94,7 @@ export default function SentenceCard({ sourceDate, exercise }: Props) {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs leading-5 text-fg-faint">
-            迷ったら復習リストへ。次に自分で書けたら外せます。
+            Save it for review if it felt tricky. Clear it once you can write it yourself.
           </p>
           <MissedProblemButton
             sourceDate={sourceDate}

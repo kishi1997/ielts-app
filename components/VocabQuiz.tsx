@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import type { VocabQuestion } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import MissedProblemButton from '@/components/MissedProblemButton'
@@ -24,13 +25,26 @@ export default function VocabQuiz({
   const isAnswered = selectedIndex !== null
   const isCorrect = selectedIndex === question.answerIndex
 
-  const notes: { label: string; value: string }[] = isAnswered
+  const notes: { label: string; value: ReactNode }[] = isAnswered
     ? [
-        { label: '意味', value: question.meaning },
-        { label: '例文', value: question.example },
-        { label: '例文の和訳', value: question.exampleJa },
-        { label: '語源', value: question.etymology },
-        { label: '覚え方', value: question.mnemonic },
+        { label: 'Meaning', value: question.meaning },
+        {
+          label: 'Example',
+          value: question.example ? (
+            <span className="space-y-1">
+              <span className="block font-serif text-base leading-relaxed text-fg">
+                {question.example}
+              </span>
+              {question.exampleJa ? (
+                <span className="block leading-relaxed text-fg-soft">
+                  （{question.exampleJa}）
+                </span>
+              ) : null}
+            </span>
+          ) : null,
+        },
+        { label: 'Etymology', value: question.etymology },
+        { label: 'Memory', value: question.mnemonic },
       ].flatMap((n) => (n.value ? [{ label: n.label, value: n.value }] : []))
     : []
 
@@ -76,17 +90,14 @@ export default function VocabQuiz({
         <div className="mt-5 space-y-4">
           <div className={`rounded-lg border p-4 ${isCorrect ? 'border-answer/30 bg-answer-bg' : 'border-error/35 bg-error-bg'}`}>
             <p className={`text-sm font-black ${isCorrect ? 'text-answer' : 'text-error'}`}>
-              {isCorrect ? '正解！' : 'ここは復習チャンス'}
+              {isCorrect ? 'Correct!' : 'Review chance'}
             </p>
             <p className="mt-2 text-sm leading-6 text-fg-soft">
-              答えは「{question.choices[question.answerIndex]}」。分からなかったら解説を見て、あとで解き直せるよう保存しよう。
+              Answer: “{question.choices[question.answerIndex]}”. Read the notes, then save this card if you want to review it later.
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="rounded-lg border border-tip/25 bg-tip-bg px-4 py-3 text-sm font-black text-tip">
-              解説は下に表示中
-            </p>
+          <div className="flex justify-end">
             <MissedProblemButton
               sourceDate={sourceDate}
               problemType="vocab"
@@ -95,12 +106,18 @@ export default function VocabQuiz({
           </div>
 
           {notes.length > 0 ? (
-            <dl className="space-y-3 rounded-lg border border-tip/25 bg-tip-bg p-4">
-              <dt className="label-text text-tip">Explanation</dt>
+            <dl className="space-y-4 rounded-lg border border-tip/25 bg-tip-bg p-4">
+              <dt className="sr-only">Explanation</dt>
               {notes.map((note) => (
-                <div key={note.label}>
-                  <dt className="label-text text-tip">{note.label}</dt>
-                  <dd className="mt-1 break-words text-sm leading-relaxed text-fg">{note.value}</dd>
+                <div key={note.label} className="grid gap-2 sm:grid-cols-[118px_1fr] sm:items-start">
+                  <dt>
+                    <span className="inline-flex min-h-9 items-center rounded-lg border border-tip/35 bg-[#2a2209] px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-tip shadow-[0_3px_0_rgba(80,61,4,0.55)]">
+                      {note.label}
+                    </span>
+                  </dt>
+                  <dd className="min-w-0 break-words text-sm leading-relaxed text-fg">
+                    {note.value}
+                  </dd>
                 </div>
               ))}
             </dl>

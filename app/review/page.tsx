@@ -19,10 +19,10 @@ export default async function ReviewPage() {
           <div className="mb-7 grid items-center gap-5 md:grid-cols-[1fr_340px]">
             <div>
               <p className="label-text text-error">Review box</p>
-              <h1 className="mt-2 text-3xl font-black text-fg sm:text-4xl">できなかった問題</h1>
-              <p className="mt-3 text-sm leading-7 text-fg-soft">答えと解説を隠さず見直し、自分で説明できた問題をクリアにしよう。</p>
+              <h1 className="mt-2 text-3xl font-black text-fg sm:text-4xl">Review Box</h1>
+              <p className="mt-3 text-sm leading-7 text-fg-soft">Read the notes, say it your way, then let the card go</p>
             </div>
-            <NightieCoach compact mood="study" message={problems.length ? `あと${problems.length}問。順番にいけば大丈夫！` : 'ぜんぶクリア！ 次の練習で新しい表現を増やそう。'} />
+            <NightieCoach compact mood="study" message={problems.length ? `${problems.length} cards waiting. One by one` : 'All clear. Time to find the next phrase'} />
           </div>
           <ReviewList initialProblems={problems} />
         </div>
