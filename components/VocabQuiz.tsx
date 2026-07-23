@@ -8,6 +8,10 @@ import MissedProblemButton from '@/components/MissedProblemButton'
 interface Props {
   sourceDate: string
   question: VocabQuestion
+  prompt: string
+  choices: string[]
+  answerIndex: number
+  mode: 'meaning' | 'word'
   roundNumber: number
   selectedIndex: number | null
   onSelect: (choiceIndex: number) => void
@@ -17,13 +21,17 @@ interface Props {
 export default function VocabQuiz({
   sourceDate,
   question,
+  prompt,
+  choices,
+  answerIndex,
+  mode,
   roundNumber,
   selectedIndex,
   onSelect,
   onNext,
 }: Props) {
   const isAnswered = selectedIndex !== null
-  const isCorrect = selectedIndex === question.answerIndex
+  const isCorrect = selectedIndex === answerIndex
 
   const notes: { label: string; value: ReactNode }[] = isAnswered
     ? [
@@ -52,7 +60,7 @@ export default function VocabQuiz({
     if (!isAnswered) {
       return 'border-border bg-surface text-fg hover:bg-surface-2'
     }
-    if (choiceIndex === question.answerIndex) {
+    if (choiceIndex === answerIndex) {
       return 'border-answer/40 bg-answer-bg text-answer'
     }
     if (choiceIndex === selectedIndex) {
@@ -65,15 +73,21 @@ export default function VocabQuiz({
     <article className="game-card p-4 sm:p-5">
       <div className="mb-5">
         <p className="label-text text-fg-faint">
-          Vocabulary Quiz{roundNumber > 1 ? ` · Round ${roundNumber}` : ''}
+          {mode === 'word' ? 'Reverse Quiz' : 'Vocabulary Quiz'}
+          {roundNumber > 1 ? ` · Round ${roundNumber}` : ''}
         </p>
         <h2 className="mt-2 font-serif text-2xl font-bold leading-tight text-fg">
-          {question.word}
+          {prompt}
         </h2>
+        {mode === 'word' ? (
+          <p className="mt-2 text-sm leading-6 text-fg-soft">
+            Pick the English word that matches this meaning.
+          </p>
+        ) : null}
       </div>
 
       <div className="space-y-3">
-        {question.choices.map((choice, choiceIndex) => (
+        {choices.map((choice, choiceIndex) => (
           <button
             key={choice}
             type="button"
@@ -93,7 +107,7 @@ export default function VocabQuiz({
               {isCorrect ? 'Correct!' : 'Review chance'}
             </p>
             <p className="mt-2 text-sm leading-6 text-fg-soft">
-              Answer: “{question.choices[question.answerIndex]}”. Read the notes, then save this card if you want to review it later.
+              Answer: “{choices[answerIndex]}”. Read the notes, then save this card if you want to review it later.
             </p>
           </div>
 
