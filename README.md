@@ -94,6 +94,19 @@ npm run deploy
 
 `deploy` は `db:deploy` のあと `opennextjs-cloudflare deploy` を実行します。
 
+## デイリー課題生成ルール
+
+`/api/exercises` に投入する `vocab` は10問、`sentences` は3〜4問です。`vocab` には既存の必須項目に加えて、必要に応じて以下の任意フィールドを含めます。
+
+- `etymology`: `dis-（離れて）+ parity（同等）` のように、覚える助けになる単語分解を書く。古典語名を起点にした専門的な説明は避ける。
+- `synonyms`: 類語を並べるだけでなく、IELTS Writingでの使い分け基準を書く。
+- `usageTip`: その語をどんな場面・構文で使うかを短く書く。
+- `mnemonic`: 記憶のフックが本当に有益な時だけ書く。
+
+表示順は `Meaning / Example / Word Parts / Synonyms / Tips / Memory` です。`etymology` はUI上では `Word Parts` として表示されます。
+
+イディオムクエストは次タスク候補です。追加する場合は `vocab` に混ぜず、将来的に `idioms` 配列を別途追加し、`Vocabulary Quest → Idiom Quest → Writing` の順に進める想定です。現時点ではAPI必須スキーマには含めません。
+
 ## Cloudflare Builds
 
 Cloudflare Dashboard の Workers Builds でGitHubリポジトリを接続します。

@@ -49,6 +49,8 @@ function isValidVocabQuestion(q: unknown): q is VocabQuestion {
     v.answerIndex < 4 &&
     (v.meaning === undefined || typeof v.meaning === 'string') &&
     (v.etymology === undefined || typeof v.etymology === 'string') &&
+    (v.synonyms === undefined || typeof v.synonyms === 'string') &&
+    (v.usageTip === undefined || typeof v.usageTip === 'string') &&
     (v.mnemonic === undefined || typeof v.mnemonic === 'string') &&
     (v.example === undefined || typeof v.example === 'string') &&
     (v.exampleJa === undefined || typeof v.exampleJa === 'string')

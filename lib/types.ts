@@ -5,6 +5,8 @@ export interface VocabQuestion {
   answerIndex: number
   meaning?: string
   etymology?: string
+  synonyms?: string
+  usageTip?: string
   mnemonic?: string
   example?: string
   exampleJa?: string

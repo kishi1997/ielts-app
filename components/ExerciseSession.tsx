@@ -383,9 +383,6 @@ function VocabRoundResult({
     <article className="game-card overflow-hidden p-0">
       <div className="relative isolate p-5 sm:p-7">
         <div className="pointer-events-none absolute -right-8 -top-10 h-36 w-36 rounded-full bg-answer/20 blur-3xl" />
-        <div className="pointer-events-none absolute bottom-8 right-8 text-5xl opacity-20 motion-safe:animate-bounce">
-          ✦
-        </div>
         <div className="pointer-events-none absolute right-20 top-20 text-4xl opacity-20 motion-safe:animate-pulse">
           🐾
         </div>
@@ -418,7 +415,7 @@ function VocabRoundResult({
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-          <Button onClick={onTryAgain} className="w-full sm:w-auto">
+          <Button onClick={onTryAgain} className="w-full bg-answer/90 sm:w-auto">
             Try Again
           </Button>
         </div>

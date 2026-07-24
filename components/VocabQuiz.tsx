@@ -51,7 +51,9 @@ export default function VocabQuiz({
             </span>
           ) : null,
         },
-        { label: 'Etymology', value: question.etymology },
+        { label: 'Word Parts', value: question.etymology },
+        { label: 'Synonyms', value: question.synonyms },
+        { label: 'Tips', value: question.usageTip },
         { label: 'Memory', value: question.mnemonic },
       ].flatMap((n) => (n.value ? [{ label: n.label, value: n.value }] : []))
     : []
@@ -106,9 +108,11 @@ export default function VocabQuiz({
             <p className={`text-sm font-black ${isCorrect ? 'text-answer' : 'text-error'}`}>
               {isCorrect ? 'Correct!' : 'Review chance'}
             </p>
-            <p className="mt-2 text-sm leading-6 text-fg-soft">
-              Answer: “{choices[answerIndex]}”. Read the notes, then save this card if you want to review it later.
-            </p>
+            {isCorrect ? null : (
+              <p className="mt-2 text-sm leading-6 text-fg-soft">
+                Answer: “{choices[answerIndex]}”. Read the notes, then save this card if you want to review it later.
+              </p>
+            )}
           </div>
 
           <div className="flex justify-end">
