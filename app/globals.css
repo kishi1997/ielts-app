@@ -67,11 +67,26 @@ html {
 
 body {
   min-height: 100dvh;
+  position: relative;
+  z-index: 0;
   background:
-    linear-gradient(rgba(5, 9, 11, 0.92), rgba(5, 9, 11, 0.96)),
-    url('/images/nightie-hero-room.png') center top / cover fixed;
+    linear-gradient(180deg, rgba(5, 9, 11, 0.78), rgba(5, 9, 11, 0.92)),
+    radial-gradient(circle at 74% 16%, rgba(255, 138, 31, 0.16), transparent 30%),
+    url('/images/nightie-guild-hero-cat.webp') center center / cover fixed;
   color: #f3f5f1;
   font-family: var(--font-sans);
+}
+
+body::before {
+  content: '';
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(5, 9, 11, 0.58), rgba(5, 9, 11, 0.18) 52%, rgba(5, 9, 11, 0.68)),
+    radial-gradient(circle at 24% 30%, rgba(255, 212, 59, 0.08), transparent 32%),
+    radial-gradient(circle at 80% 74%, rgba(255, 138, 31, 0.1), transparent 34%);
 }
 
 ::selection {
@@ -96,7 +111,10 @@ button:disabled,
   }
 
   .game-card {
-    @apply rounded-lg border border-white/10 bg-surface/90 shadow-[0_8px_0_rgba(0,0,0,0.45)];
+    @apply rounded-lg border border-white/10 bg-surface/82 shadow-[0_8px_0_rgba(0,0,0,0.45)] backdrop-blur-sm;
+    background-image:
+      radial-gradient(circle at 12% 0%, rgba(255, 138, 31, 0.08), transparent 28%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 34%);
   }
 
   .login-card-glass {
@@ -122,7 +140,7 @@ button:disabled,
     pointer-events: none;
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     overflow: hidden;
   }
 
@@ -189,6 +207,119 @@ button:disabled,
     color: #4dabf7;
     font-size: 36px;
     animation-delay: -2.6s;
+  }
+
+  .float-toy-guild-mark {
+    top: 16%;
+    left: 20%;
+    width: 46px;
+    height: 46px;
+    opacity: 0.16;
+    background: url('/images/nightie-guild-crest.png') center / contain no-repeat;
+    animation-delay: -1.2s;
+  }
+
+  .float-toy-scroll {
+    top: 54%;
+    left: 12%;
+    width: 58px;
+    height: 34px;
+    border-radius: 11px;
+    border: 1px solid rgba(255, 212, 59, 0.22);
+    background:
+      linear-gradient(90deg, rgba(255, 212, 59, 0.18), rgba(255, 138, 31, 0.08)),
+      linear-gradient(0deg, transparent 44%, rgba(255, 255, 255, 0.16) 45%, rgba(255, 255, 255, 0.16) 48%, transparent 49%);
+    --toy-rotate: -8deg;
+    animation-delay: -3.8s;
+  }
+
+  .float-toy-lantern {
+    right: 8%;
+    bottom: 18%;
+    width: 42px;
+    height: 54px;
+    border-radius: 14px 14px 18px 18px;
+    border: 1px solid rgba(255, 212, 59, 0.32);
+    background:
+      radial-gradient(circle at 50% 58%, rgba(255, 138, 31, 0.48), transparent 42%),
+      rgba(255, 212, 59, 0.08);
+    box-shadow: 0 0 24px rgba(255, 138, 31, 0.22);
+    animation-delay: -5.5s;
+  }
+
+  .float-toy-lantern::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    width: 18px;
+    height: 12px;
+    border-radius: 999px 999px 0 0;
+    border: 1px solid rgba(255, 212, 59, 0.28);
+    border-bottom: 0;
+    transform: translateX(-50%);
+  }
+
+  .float-toy-bone {
+    bottom: 24%;
+    left: 45%;
+    width: 80px;
+    height: 14px;
+    border-radius: 999px;
+    background: rgba(255, 229, 186, 0.16);
+    border: 1px solid rgba(255, 229, 186, 0.22);
+    --toy-rotate: -18deg;
+    animation-delay: -6.8s;
+  }
+
+  .float-toy-bone::before,
+  .float-toy-bone::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 229, 186, 0.2);
+    background: rgba(255, 229, 186, 0.1);
+    transform: translateY(-50%);
+  }
+
+  .float-toy-bone::before {
+    left: -12px;
+  }
+
+  .float-toy-bone::after {
+    right: -12px;
+  }
+
+  .float-toy-banner {
+    top: 42%;
+    right: 7%;
+    width: 38px;
+    height: 58px;
+    border-radius: 6px 6px 16px 16px;
+    border: 1px solid rgba(255, 138, 31, 0.26);
+    background:
+      radial-gradient(circle at 50% 34%, rgba(255, 212, 59, 0.22), transparent 20%),
+      linear-gradient(180deg, rgba(255, 138, 31, 0.2), rgba(90, 41, 8, 0.12));
+    clip-path: polygon(0 0, 100% 0, 100% 78%, 50% 100%, 0 78%);
+    --toy-rotate: 12deg;
+    animation-duration: 10s;
+    animation-delay: -7.4s;
+  }
+
+  .float-toy-stone {
+    top: 72%;
+    left: 28%;
+    width: 74px;
+    height: 18px;
+    border-radius: 999px 999px 12px 12px;
+    border: 1px solid rgba(77, 171, 247, 0.2);
+    background: rgba(180, 190, 180, 0.1);
+    --toy-rotate: -10deg;
+    animation-duration: 9.5s;
+    animation-delay: -4.6s;
   }
 
   .float-toy-fish {
@@ -310,8 +441,9 @@ button:disabled,
     right: 24px;
     width: 22px;
     height: 22px;
-    border-radius: 7px;
-    border: 1px solid rgba(255, 212, 59, 0.24);
+    border-radius: 999px;
+    background: url('/images/nightie-guild-crest.png') center / contain no-repeat;
+    border: 0;
     transform: rotate(14deg);
   }
 
@@ -419,6 +551,35 @@ button:disabled,
     line-height: 1;
     opacity: 0.92;
     animation: soft-wiggle 4.8s ease-in-out infinite;
+  }
+
+  .status-card-image {
+    position: absolute;
+    right: 14px;
+    top: 10px;
+    height: 42px;
+    width: 46px;
+    object-fit: contain;
+    opacity: 0.94;
+    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.44));
+    animation: soft-wiggle 4.8s ease-in-out infinite;
+  }
+
+  .guild-feature-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .guild-feature-card::after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    top: -14px;
+    width: 48px;
+    height: 48px;
+    background: url('/images/nightie-guild-crest.png') center / contain no-repeat;
+    opacity: 0.11;
+    transform: rotate(12deg);
   }
 
   .cat-tower-mini {
@@ -618,6 +779,7 @@ button:disabled,
   .hero-play-shapes span,
   .sidebar-play-shapes span,
   .status-card-icon,
+  .status-card-image,
   .status-card-play::before,
   .status-card-play::after {
     animation: none;

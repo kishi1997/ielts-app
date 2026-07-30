@@ -13,23 +13,15 @@ export default async function LoginPage() {
   if (session?.user) redirect('/dashboard')
 
   return (
-    <main className="relative min-h-dvh overflow-hidden bg-bg">
-      <Image
-        src="/images/nightie-hero-room.png"
-        alt=""
-        fill
-        sizes="100vw"
-        className="-scale-x-100 object-cover object-[36%_center]"
-        priority
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,12,0.92)_0%,rgba(5,8,12,0.64)_44%,rgba(5,8,12,0.2)_72%,rgba(5,8,12,0.5)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_62%_44%,rgba(255,212,59,0.14),transparent_28%),radial-gradient(circle_at_76%_42%,rgba(88,204,2,0.1),transparent_25%)]" />
-
+    <main className="relative min-h-dvh overflow-hidden">
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,12,0.62)_0%,rgba(5,8,12,0.54)_42%,rgba(5,8,12,0.22)_72%,rgba(5,8,12,0.54)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_32%,rgba(255,138,31,0.18),transparent_28%),radial-gradient(circle_at_76%_42%,rgba(255,212,59,0.1),transparent_25%)]" />
       <div className="relative z-10 flex min-h-dvh items-center px-4 py-8 sm:px-8">
         <div className="grid w-full max-w-7xl gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(340px,380px)]">
           <section className="flex min-h-[420px] flex-col justify-center">
             <div className="inline-flex w-fit items-center gap-2 rounded-lg border border-[#ffd43b]/25 bg-[#171607]/85 px-3 py-2 text-xs font-black text-[#ffd43b] backdrop-blur">
-              ✦ IELTS VOCABULARY & SENTENCE WRITING
+              <Image src="/images/nightie-guild-crest.png" alt="" width={22} height={22} className="h-5 w-5 object-contain" />
+              IELTS VOCABULARY & SENTENCE WRITING
             </div>
             <h1 className="mt-6 max-w-2xl text-4xl font-black leading-tight text-white sm:text-6xl">
               Build your words<br /><span className="text-answer">Boost your IELTS</span>
@@ -47,15 +39,15 @@ export default async function LoginPage() {
               </p>
             </div>
             <div className="mt-8 grid max-w-xl gap-2 text-xs font-black text-fg-soft sm:grid-cols-3">
-              <div className="rounded-lg border border-answer/25 bg-answer/10 p-3 text-answer backdrop-blur">
+              <div className="guild-feature-card rounded-lg border border-answer/25 bg-answer/10 p-3 text-answer backdrop-blur">
                 Vocabulary Quiz
                 <span className="mt-1 block text-[11px] font-bold text-white/55">IELTS 6.5-7.0語彙</span>
               </div>
-              <div className="rounded-lg border border-[#4dabf7]/25 bg-[#4dabf7]/10 p-3 text-[#8fd0ff] backdrop-blur">
+              <div className="guild-feature-card rounded-lg border border-[#4dabf7]/25 bg-[#4dabf7]/10 p-3 text-[#8fd0ff] backdrop-blur">
                 Sentence Writing
                 <span className="mt-1 block text-[11px] font-bold text-white/55">日本語→英語の瞬間練習</span>
               </div>
-              <div className="rounded-lg border border-[#ffd43b]/25 bg-[#ffd43b]/10 p-3 text-[#ffd43b] backdrop-blur">
+              <div className="guild-feature-card rounded-lg border border-[#ffd43b]/25 bg-[#ffd43b]/10 p-3 text-[#ffd43b] backdrop-blur">
                 Review List
                 <span className="mt-1 block text-[11px] font-bold text-white/55">苦手だけを保存</span>
               </div>

@@ -14,6 +14,10 @@ interface CountRow {
   count: number
 }
 
+interface QuestCompletionRow {
+  source_date: string
+}
+
 interface MissedProblemRow {
   id: string
   source_date: string
@@ -38,12 +42,17 @@ export interface MissedProblemInput {
   explanation: string
 }
 
-function getDb(): D1Database {
-  return getCloudflareContext().env.DB
+export interface QuestCompletionInput {
+  sourceDate: string
+}
+
+async function getDb(): Promise<D1Database> {
+  const { env } = await getCloudflareContext({ async: true })
+  return env.DB
 }
 
 export async function ensureUser(user: { id: string; name: string; email?: string | null }): Promise<void> {
-  await getDb()
+  await (await getDb())
     .prepare(`
       INSERT INTO users (id, name, email)
       VALUES (?, ?, ?)
@@ -60,7 +69,7 @@ export async function getExercisesByDate(date: string): Promise<DailyContent | n
     return PREVIEW_DAILY_CONTENT
   }
 
-  const row = await getDb()
+  const row = await (await getDb())
     .prepare('SELECT exercises FROM daily_exercises WHERE date = ?')
     .bind(date)
     .first<DailyExerciseRow>()
@@ -74,8 +83,39 @@ export async function getAllDates(): Promise<string[]> {
     return [PREVIEW_DATE]
   }
 
-  const { results } = await getDb()
+  const { results } = await (await getDb())
     .prepare('SELECT date FROM daily_exercises ORDER BY date DESC')
+    .all<DateRow>()
+
+  return results.map((row) => row.date)
+}
+
+export async function getIncompleteQuestDates(userId: string): Promise<string[]> {
+  if (isPreviewMode()) {
+    const row = await (await getDb())
+      .prepare(`
+        SELECT source_date
+        FROM quest_completions
+        WHERE user_id = ? AND source_date = ?
+        LIMIT 1
+      `)
+      .bind(userId, PREVIEW_DATE)
+      .first<QuestCompletionRow>()
+
+    return row ? [] : [PREVIEW_DATE]
+  }
+
+  const { results } = await (await getDb())
+    .prepare(`
+      SELECT d.date
+      FROM daily_exercises d
+      LEFT JOIN quest_completions qc
+        ON qc.source_date = d.date
+       AND qc.user_id = ?
+      WHERE qc.source_date IS NULL
+      ORDER BY d.date ASC
+    `)
+    .bind(userId)
     .all<DateRow>()
 
   return results.map((row) => row.date)
@@ -86,7 +126,7 @@ export async function exerciseExistsForDate(date: string): Promise<boolean> {
     return true
   }
 
-  const row = await getDb()
+  const row = await (await getDb())
     .prepare('SELECT 1 AS found FROM daily_exercises WHERE date = ? LIMIT 1')
     .bind(date)
     .first<{ found: number }>()
@@ -94,14 +134,27 @@ export async function exerciseExistsForDate(date: string): Promise<boolean> {
 }
 
 export async function saveExercises(date: string, content: DailyContent): Promise<void> {
-  await getDb()
+  await (await getDb())
     .prepare('INSERT INTO daily_exercises (date, exercises) VALUES (?, ?)')
     .bind(date, JSON.stringify(content))
     .run()
 }
 
+export async function markQuestComplete(userId: string, input: QuestCompletionInput): Promise<void> {
+  await (await getDb())
+    .prepare(`
+      INSERT INTO quest_completions (id, user_id, source_date)
+      VALUES (?, ?, ?)
+      ON CONFLICT(user_id, source_date) DO UPDATE SET
+        completed_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
+        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+    `)
+    .bind(crypto.randomUUID(), userId, input.sourceDate)
+    .run()
+}
+
 export async function getActiveMissedProblems(userId: string): Promise<MissedProblem[]> {
-  const { results } = await getDb()
+  const { results } = await (await getDb())
     .prepare(`
       SELECT id, source_date, problem_type, problem_order, title, prompt, answer,
              explanation, created_at, updated_at
@@ -116,7 +169,7 @@ export async function getActiveMissedProblems(userId: string): Promise<MissedPro
 }
 
 export async function getActiveMissedProblemCount(userId: string): Promise<number> {
-  const row = await getDb()
+  const row = await (await getDb())
     .prepare(`
       SELECT COUNT(*) AS count
       FROM missed_problems
@@ -132,7 +185,7 @@ export async function addMissedProblem(
   userId: string,
   input: MissedProblemInput,
 ): Promise<void> {
-  await getDb()
+  await (await getDb())
     .prepare(`
       INSERT INTO missed_problems (
         id, user_id, problem_key, source_date, problem_type, problem_order,
@@ -162,7 +215,7 @@ export async function addMissedProblem(
 }
 
 export async function resolveMissedProblem(id: string, userId: string): Promise<boolean> {
-  const result = await getDb()
+  const result = await (await getDb())
     .prepare(`
       UPDATE missed_problems
       SET resolved_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),

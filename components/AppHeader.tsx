@@ -59,7 +59,7 @@ export default function AppHeader({ active, userName }: Props) {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[268px] overflow-hidden border-r border-white/12 bg-[#070a0e]/96 px-3 py-4 shadow-[12px_0_40px_rgba(0,0,0,0.28)] backdrop-blur-xl lg:flex lg:flex-col">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[268px] overflow-hidden border-r border-white/12 px-3 py-4 shadow-[12px_0_40px_rgba(0,0,0,0.28)] lg:flex lg:flex-col">
         <div className="sidebar-play-shapes" aria-hidden="true">
           <span />
           <span />
@@ -75,8 +75,8 @@ export default function AppHeader({ active, userName }: Props) {
             className="sidebar-floating-nightie"
           />
         </div>
-        <Link href="/dashboard" className="mb-8 flex min-w-0 items-center gap-3 rounded-lg border border-[#ffd43b]/25 bg-[#11140d] p-3 shadow-[0_6px_0_#030405]">
-          <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-[#ffd43b]/35">
+        <Link href="/dashboard" className="mb-8 flex min-w-0 items-center gap-3 rounded-lg border border-[#ffd43b]/25 bg-[#11140d]/92 p-3 shadow-[0_6px_0_#030405]">
+          <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-[#ffd43b]/35 bg-black/30">
             <Image
               src="/images/nightie-coach.png"
               alt="黒猫コーチのナイチー"
@@ -85,6 +85,9 @@ export default function AppHeader({ active, userName }: Props) {
               className="object-cover object-center"
               priority
             />
+            <span className="absolute -bottom-1 -right-1 grid h-6 w-6 place-items-center rounded-full border border-[#ffd43b]/40 bg-[#11140d]">
+              <Image src="/images/nightie-guild-crest.png" alt="" width={22} height={22} className="h-5 w-5 object-contain" />
+            </span>
           </span>
           <span className="min-w-0">
             <span className="block truncate text-sm font-black text-white">Writing Quest</span>
@@ -119,11 +122,13 @@ export default function AppHeader({ active, userName }: Props) {
         </nav>
       </aside>
 
-      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080b10]/90 backdrop-blur-xl lg:ml-[268px]">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080b10]/72 backdrop-blur-md lg:ml-[268px]">
         <div className="flex min-h-16 items-center gap-3 px-4 sm:px-6">
           <Link href="/dashboard" className="mr-auto flex min-w-0 items-center gap-2.5">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-answer text-lg font-black text-[#2b1100] shadow-[0_4px_0_#9a4600]">✦</span>
-            <span className="truncate text-xs font-black uppercase tracking-wide text-fg-soft sm:text-sm">Night Study Mode</span>
+            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-[#ffd43b]/25 bg-[#171607] shadow-[0_4px_0_#030405]">
+              <Image src="/images/nightie-coach.png" alt="" fill sizes="36px" className="object-cover object-center" />
+            </span>
+            <span className="truncate text-xs font-black uppercase tracking-wide text-fg-soft sm:text-sm">Nightie Guild Mode</span>
           </Link>
 
           <nav className="hidden items-center gap-1 md:flex lg:hidden" aria-label="タブナビゲーション">

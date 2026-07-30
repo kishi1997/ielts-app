@@ -31,7 +31,7 @@ export default function RootLayout({
       className={`${notoSansJP.variable} ${newsreader.variable}`}
       style={{ colorScheme: 'dark' }}
     >
-      <body className="bg-bg text-fg font-sans antialiased">{children}</body>
+      <body className="text-fg font-sans antialiased">{children}</body>
     </html>
   )
 }

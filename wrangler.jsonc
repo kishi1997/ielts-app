@@ -15,18 +15,31 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  "services": [
-    {
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "ielts-writing-app"
-    }
-  ],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "ielts-writing",
       "database_id": "b212ff67-5061-437e-9270-72f33d4b8603",
-      "migrations_dir": "migrations"
+      "migrations_dir": "migrations",
+      "remote": true
     }
-  ]
+  ],
+  "env": {
+    "staging": {
+      "name": "ielts-writing-app-staging",
+      "vars": {
+        "AUTH_URL": "http://localhost:3000",
+        "AUTH_TRUST_HOST": "true"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "ielts-writing-staging",
+          "database_id": "857d495e-297a-4ff2-9520-b7347243e2dc",
+          "migrations_dir": "migrations",
+          "remote": true
+        }
+      ]
+    }
+  }
 }

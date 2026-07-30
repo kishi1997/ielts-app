@@ -15,7 +15,6 @@
 ```bash
 npm install
 cp .dev.vars.example .dev.vars
-npm run db:migrate:local
 npm run dev
 ```
 
@@ -62,13 +61,45 @@ npm exec wrangler secret put IELTS_API_SECRET
 
 ## D1
 
-`wrangler.jsonc` は指定の参考プロジェクトに合わせて、以下のD1を参照しています。
+`wrangler.jsonc` は本番用とローカル開発用でD1を分けています。
+
+本番:
 
 - database_name: `ielts-writing`
 - database_id: `b212ff67-5061-437e-9270-72f33d4b8603`
 - binding: `DB`
 
-ローカル:
+ローカル開発 / staging:
+
+- database_name: `ielts-writing-staging`
+- database_id: `857d495e-297a-4ff2-9520-b7347243e2dc`
+- binding: `DB`
+
+ローカル開発:
+
+`npm run dev` は `NEXT_DEV_WRANGLER_ENV=staging` 付きで起動するため、Cloudflare上のremote staging D1を参照します。本番D1を直接汚さずに、本番に近いCloudflare D1の挙動で確認するためです。
+
+Cloudflare Workerに近い形でローカル確認する場合:
+
+```bash
+npm run preview
+```
+
+`preview` も staging D1 を参照します。本番D1でどうしても確認したい場合のみ、明示的に `npm run preview:production` を使います。
+
+staging D1にスキーマ変更を反映する場合:
+
+```bash
+npm run db:deploy:staging
+```
+
+本番D1にスキーマ変更を反映する場合:
+
+```bash
+npm run db:deploy
+```
+
+ローカルだけで隔離したD1を使いたい場合:
 
 ```bash
 npm run db:migrate:local

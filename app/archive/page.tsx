@@ -26,7 +26,7 @@ export default async function ArchivePage() {
   const grouped = groupByMonth(dates)
 
   return (
-    <div className="min-h-dvh bg-bg">
+    <div className="min-h-dvh">
       <AppHeader active="archive" userName={user.name} />
       <main className="lg:ml-[268px]">
         <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 sm:py-10">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import type { DailyContent } from '@/lib/types'
 import VocabQuiz from '@/components/VocabQuiz'
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 
 type Phase = 'vocab' | 'vocabResult' | 'writing' | 'writingResult'
+type CompletionStatus = 'idle' | 'saving' | 'saved' | 'error'
 
 interface Props {
   content: DailyContent
@@ -73,6 +74,7 @@ function buildReverseVocabChoices(content: DailyContent, questionOrder: number, 
 
 export default function ExerciseSession({ content, currentDate, olderDate, newerDate }: Props) {
   const [phase, setPhase] = useState<Phase>('vocab')
+  const completionSaveStarted = useRef(false)
 
   const [vocabRound, setVocabRound] = useState(1)
   const [vocabOrder, setVocabOrder] = useState<number[]>(() =>
@@ -83,6 +85,7 @@ export default function ExerciseSession({ content, currentDate, olderDate, newer
   const [vocabWrongInRound, setVocabWrongInRound] = useState<Set<number>>(new Set())
 
   const [writingIndex, setWritingIndex] = useState(0)
+  const [completionStatus, setCompletionStatus] = useState<CompletionStatus>('idle')
 
   const currentVocabQuestion = content.vocab[vocabOrder[vocabPosition]]
   const isReverseVocabRound = vocabRound > 1
@@ -158,6 +161,25 @@ export default function ExerciseSession({ content, currentDate, olderDate, newer
 
     setWritingIndex((index) => Math.min(totalWritingSteps - 1, index + 1))
   }
+
+  useEffect(() => {
+    if (phase !== 'writingResult' || completionSaveStarted.current) return
+    completionSaveStarted.current = true
+    setCompletionStatus('saving')
+
+    fetch('/api/quest-completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sourceDate: currentDate }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Failed to save completion')
+        setCompletionStatus('saved')
+      })
+      .catch(() => {
+        setCompletionStatus('error')
+      })
+  }, [currentDate, phase])
 
   const phaseLabel =
     phase === 'writing' ? 'Writing' : phase === 'writingResult' ? 'Quest Complete' : 'Vocabulary'
@@ -269,7 +291,7 @@ export default function ExerciseSession({ content, currentDate, olderDate, newer
             onTryAgain={startNextVocabRound}
           />
         ) : phase === 'writingResult' ? (
-          <WritingCompleteResult totalCount={totalWritingSteps} />
+          <WritingCompleteResult totalCount={totalWritingSteps} completionStatus={completionStatus} />
         ) : (
           <SentenceCard
             key={currentSentence.order}
@@ -302,9 +324,19 @@ export default function ExerciseSession({ content, currentDate, olderDate, newer
 
 interface WritingCompleteResultProps {
   totalCount: number
+  completionStatus: CompletionStatus
 }
 
-function WritingCompleteResult({ totalCount }: WritingCompleteResultProps) {
+function WritingCompleteResult({ totalCount, completionStatus }: WritingCompleteResultProps) {
+  const completionMessage =
+    completionStatus === 'saving'
+      ? 'Saving this quest to your trail…'
+      : completionStatus === 'saved'
+        ? 'Saved. This quest will leave your open list.'
+        : completionStatus === 'error'
+          ? 'Could not save completion. This quest may still appear as open.'
+          : 'Marking this quest complete.'
+
   return (
     <article className="game-card overflow-hidden p-0">
       <div className="relative isolate p-5 sm:p-7">
@@ -341,6 +373,9 @@ function WritingCompleteResult({ totalCount }: WritingCompleteResultProps) {
           <p className="text-sm font-black text-tip">Nightie says: good work, keep one card moving</p>
           <p className="mt-2 text-sm leading-6 text-fg-soft">
             Review saved cards while the sentence patterns are still fresh.
+          </p>
+          <p className={`mt-3 text-xs font-black ${completionStatus === 'error' ? 'text-error' : 'text-answer'}`}>
+            {completionMessage}
           </p>
         </div>
 

@@ -24,7 +24,7 @@ export default async function ExercisePage({ params }: Props) {
   const olderDate = index >= 0 && index < dates.length - 1 ? dates[index + 1] : null
 
   return (
-    <div className="min-h-dvh bg-bg">
+    <div className="min-h-dvh">
       <AppHeader active="practice" userName={user.name} />
       <ExerciseSession content={content} currentDate={date} olderDate={olderDate} newerDate={newerDate} />
     </div>

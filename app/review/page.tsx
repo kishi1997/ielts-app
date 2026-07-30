@@ -12,7 +12,7 @@ export default async function ReviewPage() {
   const problems = await getActiveMissedProblems(user.id)
 
   return (
-    <div className="min-h-dvh bg-bg">
+    <div className="min-h-dvh">
       <AppHeader active="review" userName={user.name} />
       <main className="lg:ml-[268px]">
         <div className="mx-auto max-w-4xl px-4 py-7 sm:px-6 sm:py-10">
